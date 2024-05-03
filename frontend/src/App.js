@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css'
 import { useEffect, useState } from 'react';
 import DetectorDetail from './components/DetectorDetail.js'
 import { v4 as uuidv4 } from 'uuid';
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import RoadDetail from './components/RoadDetail.js';
 import DataSetsPicker from './components/DatasetsPicker.js';
 
@@ -99,8 +99,7 @@ function App() {
 
       
       var tempMaxCensus = [0,0,0,0,0,0,0,0];
-      jsonResultCensus.features.forEach((element, index) => {
-        const allCensus = (element.properties.prac_2016 + element.properties.vik_2016 + element.properties.prac_2018 + element.properties.vik_2018 + element.properties.prac_2020 + element.properties.vik_2020 + element.properties.prac_2022 + element.properties.vik_2022) * 10;
+      jsonResultCensus.features.forEach((element) => {
         if(element.properties.vik_2016 > tempMaxCensus[0]){
           tempMaxCensus[0] = element.properties.vik_2016;
         }
@@ -149,7 +148,7 @@ function App() {
   }, [])
 
   const setKeys = (size) => {
-    if(roadKeys.length == 0){
+    if(roadKeys.length === 0){
       const array = Array.from({ length: size }, (_, index) => uuidv4())
       setRoadKeys([...array]);
     }
@@ -161,7 +160,7 @@ function App() {
   }
 
   const LoadAccidents = async () => {
-    if(accidents.length == 0){
+    if(accidents.length === 0){
       const result = await fetch('http://localhost:3001/accidents')
       const jsonResult = await result.json();
       console.log(jsonResult);
@@ -180,7 +179,7 @@ function App() {
 
   useEffect(() =>{
     //debugger
-      if(bikeToWorkMap.size > 0 && maxCensus != 0){
+      if(bikeToWorkMap.size > 0 && maxCensus !== 0){
         const calculatedWeights = model.map(fullmodel => getWeight(bikeToWork[bikeToWorkMap.get(fullmodel.properties.biketowork_id)], census.find(objekt => objekt.properties.ObjectId === fullmodel.properties.city_census_id), maxBikeToWork, maxCensus));
         setKeys(calculatedWeights.length);
         setWeights([...calculatedWeights]);
@@ -336,7 +335,7 @@ function App() {
     }
     catch(e){
       //tady je chyba ze to sem skoci pokazdy, i kdyz biketowork je a census neni
-      if(all != 0){
+      if(all !== 0){
         return mapRange(all, 0, max, 0.5, 10);
       }
       else{
@@ -383,7 +382,7 @@ function App() {
       <DataSetsPicker setDataset={setUseDataset} useDataset={useDataset} bikeToWork={bikeToWorkHeatmap} census={censusHeatmap} setBikeToWork={setBikeToWorkHeatmap} setCensus={setCensusHeatmap}/>
       {isLoading ?
         <div id="loadingDiv">
-          <img src='./Spinner-1s-200px.svg'></img>
+          <img src='./Spinner-1s-200px.svg' alt='Loading...'></img>
         </div>
         : null
       }
