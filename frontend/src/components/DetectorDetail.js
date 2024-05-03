@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Brush, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import filterIcon from '../img/filter.png';
 import rightIcon from '../img/right.png';
 import moment from 'moment';
@@ -35,8 +35,7 @@ function DetectorDetail({show, closeFunction, detector, points}){
     //data pro filtr
     const [selectedTimes, setSelectedTimes] = useState([true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]);
     const [selectedDays, setSelectedDays] = useState([true, true, true, true, true, true, true]);
-    const [selectedDateFirst, setSelectedDateFirst] = useState();
-    const [selectedDateSecond, setSelectedDateSecond] = useState();
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -64,8 +63,6 @@ function DetectorDetail({show, closeFunction, detector, points}){
             //nastavení hranic datového filtru
             setMinDate(minDateTmp);
             setMaxDate(maxDateTmp);
-            setSelectedDateFirst(moment(minDateTmp, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DD'));
-            setSelectedDateSecond(moment(maxDateTmp, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DD'));
             //nastavení dat pro grafy
             filterData(moment(minDateTmp, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DD'), moment(maxDateTmp, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DD'), jsonResult.features, selectedDays, selectedTimes);
 
@@ -110,10 +107,6 @@ function DetectorDetail({show, closeFunction, detector, points}){
         
         dataset.forEach((element) => {
             //ověření, zda záznam odpovídá filtru
-            const help1 = moment(element.properties.EndOfInterval, 'DD.MM.YYYY HH:mm').toDate() >= moment(dateStart, 'YYYY-MM-DD').toDate()
-            const help2 = moment(element.properties.EndOfInterval, 'DD.MM.YYYY HH:mm').toDate() <= moment(dateEnd, 'YYYY-MM-DD').toDate()
-            const help3 = selectedTimesIn[moment(element.properties.EndOfInterval, 'DD.MM.YYYY HH:mm').hour()]
-            const help4 = selectedDaysIn[moment(element.properties.EndOfInterval, 'DD.MM.YYYY HH:mm').isoWeekday() - 1]
             if(moment(element.properties.EndOfInterval, 'DD.MM.YYYY HH:mm').toDate() >= moment(dateStart, 'YYYY-MM-DD').toDate() && moment(element.properties.EndOfInterval, 'DD.MM.YYYY HH:mm').toDate() <= moment(dateEnd, 'YYYY-MM-DD').toDate() &&
                 selectedTimesIn[moment(element.properties.EndOfInterval, 'DD.MM.YYYY HH:mm').hour()]  && selectedDaysIn[moment(element.properties.EndOfInterval, 'DD.MM.YYYY HH:mm').isoWeekday() - 1]){
                 
@@ -212,7 +205,7 @@ function DetectorDetail({show, closeFunction, detector, points}){
             <div className='rightIcon'><img src={rightIcon} alt='close' onClick={() => {closeFunction()}}></img></div>
             <div className='filterIcon'><img src={filterIcon} alt='filter' onClick={() => {setShowFilter(!showFilter)}}></img></div>
             
-            { isLoading || !detector ?<><p>Načítání...</p> <img src='./Spinner-1s-200px.svg'></img></> : 
+            { isLoading || !detector ?<><p>Načítání...</p> <img src='./Spinner-1s-200px.svg' alt='Loading...'></img></> : 
             <div className='detailData'>
             <div id="detectorTable">
             <table>

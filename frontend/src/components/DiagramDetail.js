@@ -39,8 +39,8 @@ function DiagramDetail({type, detectors, closeFunction}){
                 var helpArray = [];
                 jsonResult.forEach((element) => {
                     
-                    const help = detectors.find(objekt => objekt.properties.LocationId == element.id);
-                    if(help != undefined){
+                    const help = detectors.find(objekt => objekt.properties.LocationId === element.id);
+                    if(help !== undefined){
                         helpArray.push({...element, name: help.properties.UnitName})
                     }
                 })
@@ -81,7 +81,7 @@ function DiagramDetail({type, detectors, closeFunction}){
                 </ResponsiveContainer>
                 {!loaded && 
                 <div className='loadingDivDiagram'>
-                    <img src='./Spinner-1s-200px.svg'></img>
+                    <img src='./Spinner-1s-200px.svg' alt='Loading...'></img>
                     <p>Toto bude nejspíše chvíli trvat...</p>
                 </div>
                 }

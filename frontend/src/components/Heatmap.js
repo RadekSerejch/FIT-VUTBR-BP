@@ -8,7 +8,7 @@ const Heatmap = memo(({ model, isLoading, weights, handlePolylineClick , keys, s
       {!isLoading && model.map((fullmodel, index) => (
         <Polyline key={keys[index]}
           positions={fullmodel.geometry.coordinates} 
-          color={fullmodel.properties.id == selectedId ? "blue" : "red"}
+          color={fullmodel.properties.id === selectedId ? "blue" : "red"}
           clickTolerance={20}
           weight={weights[index]}
           eventHandlers={{

@@ -25,7 +25,7 @@ function CustomSlider({sliderMin, sliderMax, setBoundries}){
 
     useEffect(() => {
         //promítnutí změny v číselných hodnotách slideru do datumových hodnot
-        if(maxVal != undefined){
+        if(maxVal !== undefined){
             var date1 = new Date(moment(sliderMin, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DD'));
             var date2 = new Date(moment(sliderMax, 'DD.MM.YYYY HH:mm').format('YYYY-MM-DD'));
             date1 = new Date(date1.getTime() + (values[0] * (1000 * 60 * 60 * 24)));
