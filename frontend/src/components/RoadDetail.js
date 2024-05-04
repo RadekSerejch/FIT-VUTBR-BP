@@ -29,7 +29,7 @@ function RoadDetail({show, closeFunction, road, road_scitani}){
         }
     }, [road, road_scitani])
     
-    //část pro mdoel sčítání
+    //část pro model sčítání
     const returnScitani = () => {
         return road_scitani?
         <div className='raodBlock' style={{height: '350px'}}>

@@ -34,14 +34,11 @@ function DateFilter({showFilter, isLoading, minDate, maxDate, filterData, setSel
     const filterClick = () => {
         setSelectedDaysOuter(selectedDays);
         setSelectedTimesOuter(selectedTimes);
-        console.log(selectedDateFirst);
-        console.log(selectedDateSecond);
         filterData(selectedDateFirst, selectedDateSecond, selectedDays, selectedTimes);
     }
 
     //změna vybraných hranic datumů
     const setDateLimit = (first, second) => {
-        console.log(first, second);
         setSelectedDateFirst(first);
         setSelectedDateSecond(second);
     }

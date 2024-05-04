@@ -13,7 +13,6 @@ function DiagramDetail({type, detectors, closeFunction}){
         const fetchData = async () => {
             var jsonResult = null;
             var result = null
-            console.log(type);
             //načtení dat podle typu grafu, který má být zobrazen
             switch(type){
                 case 0:
@@ -44,7 +43,6 @@ function DiagramDetail({type, detectors, closeFunction}){
                         helpArray.push({...element, name: help.properties.UnitName})
                     }
                 })
-                console.log([...helpArray]);
                 setDiagramData([...helpArray])
                 setLoaded(true);
             }

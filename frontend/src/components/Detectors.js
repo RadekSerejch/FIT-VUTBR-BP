@@ -17,7 +17,6 @@ function Detectors({points, show, detectorClick, isLoading}){
                         icon={customIcon}
                         eventHandlers={{
                         click: (e) => {
-                            console.log("clocked");
                             detectorClick(index)
                         },
                         mouseover: (event) => event.target.openPopup(),

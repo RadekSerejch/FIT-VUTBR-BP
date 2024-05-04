@@ -41,10 +41,10 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Průhledné šedé pozadí */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: center; /* Zarovnání obsahu na střed */
-  align-items: center; /* Zarovnání obsahu na střed */
+  justify-content: center;
+  align-items: center;
   z-index: 9998;
 }
 
@@ -376,8 +376,6 @@ button:hover{
 }
 
 
-
-/* Customize the label (the container) */
 .container {
   display: block;
   position: relative;
@@ -391,7 +389,6 @@ button:hover{
   user-select: none;
 }
 
-/* Hide the browser's default checkbox */
 .container input {
   position: absolute;
   opacity: 0;
@@ -400,7 +397,6 @@ button:hover{
   width: 0;
 }
 
-/* Create a custom checkbox */
 .checkmark {
   position: absolute;
   top: 1px;
@@ -412,30 +408,25 @@ button:hover{
   border: 1px solid gray;
 }
 
-/* On mouse-over, add a grey background color */
 .container:hover input ~ .checkmark {
   background-color: #ccc;
 }
 
-/* When the checkbox is checked, add a blue background */
 .container input:checked ~ .checkmark {
   background-color: #da2127;
   border: none;
 }
 
-/* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
   content: "";
   position: absolute;
   display: none;
 }
 
-/* Show the checkmark when checked */
 .container input:checked ~ .checkmark:after {
   display: block;
 }
 
-/* Style the checkmark/indicator */
 .container .checkmark:after {
   left: 7px;
   top: 2px;

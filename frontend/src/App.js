@@ -47,7 +47,6 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(isLoading);
       setIsLoading(true);
       
       var resultDetectors, jsonResultDetectors, resultAll, jsonResultAll, resultBikeToWork, jsonResultBikeToWork, resultCensus, jsonResultCensus;
@@ -131,7 +130,7 @@ function App() {
 
 
       const calculatedWeights = jsonResultAll.features.map(fullmodel => getWeight(jsonResultBikeToWork.features[tempMap.get(fullmodel.properties.biketowork_id)], jsonResultCensus.features.find(objekt => objekt.properties.ObjectId === fullmodel.properties.city_census_id), tempMax, updatedMaxCensus));
-      console.log(calculatedWeights.length);
+      
       setKeys(calculatedWeights.length);
       setWeights([...calculatedWeights]);
 
@@ -141,7 +140,6 @@ function App() {
 
     
     if(!isLoading){
-      console.log("loading data");
       fetchData();
     }
     
@@ -156,14 +154,12 @@ function App() {
       const incrementedNumbers = roadKeys.map(() => uuidv4());
       setRoadKeys(incrementedNumbers);
     }
-    console.log("a");
   }
 
   const LoadAccidents = async () => {
     if(accidents.length === 0){
       const result = await fetch('http://localhost:3001/accidents')
       const jsonResult = await result.json();
-      console.log(jsonResult);
       setAccidents(jsonResult.features);
     }
     else{
@@ -210,7 +206,6 @@ function App() {
       })
     }
     if(index){
-      console.log("here");
       tmpKeys[index] = uuidv4();
     }
     setRoadKeys([...tmpKeys]);
@@ -234,7 +229,6 @@ function App() {
   }
 
   const accidentClick = (index) => {
-    console.log("here")
     setShowRoad(false);
     setSelectedRoad(null);
     setShowDetector(false);
@@ -286,8 +280,6 @@ function App() {
           all += biketoWorkEntity.properties.dpnk_22;
           max += BikeToWorkMax[4];
         }
-        //all += biketoWorkEntity.properties.data_2018 + biketoWorkEntity.properties.data_2019 + biketoWorkEntity.properties.data_2020 + biketoWorkEntity.properties.data_2021 + biketoWorkEntity.properties.dpnk_22;
-        //max += maxBikeToWork;
       }
       if(useDataset[1] && censusEntity){
         if(censusHeatmap[0]){
@@ -323,18 +315,12 @@ function App() {
           max += CensusMax[7];
         }
 
-        //all += (censusEntity.properties.prac_2016 + censusEntity.properties.vik_2016 + censusEntity.properties.prac_2018 + censusEntity.properties.vik_2018 + censusEntity.properties.prac_2020 + censusEntity.properties.vik_2020 + censusEntity.properties.prac_2022 + censusEntity.properties.vik_2022) * 10;
-        //debugger
-        //max += maxCensus;
-
       }
-      
-      //console.log(mapRange(all, 0, maxBikeToWork, 1, 4), all, maxBikeToWork)
+    
       return mapRange(all, 0, max, 0.5, 10);
       
     }
     catch(e){
-      //tady je chyba ze to sem skoci pokazdy, i kdyz biketowork je a census neni
       if(all !== 0){
         return mapRange(all, 0, max, 0.5, 10);
       }
@@ -345,7 +331,6 @@ function App() {
   }
 
   const handlePolylineClick = (fullmodel, index) => {
-    console.log("clicked")
     setShowDetector(false);
     setSelectedPoint(null);
     setShowRoad(true);

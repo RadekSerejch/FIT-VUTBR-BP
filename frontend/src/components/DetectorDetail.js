@@ -74,15 +74,8 @@ function DetectorDetail({show, closeFunction, detector, points}){
         }
     }, [detector])
 
-    useEffect(() => {
-        console.log("chart rendered")
-      }, [chartRef]);
-
 
     const filterData = (dateStart, dateEnd, dataset, selectedDaysIn, selectedTimesIn) => {
-        console.log(dateStart, dateEnd)
-        
-        console.log("filter started");
         var tmpArray = [];
         var tmpTableData = [];
         var cnt = 0;
@@ -179,8 +172,6 @@ function DetectorDetail({show, closeFunction, detector, points}){
         tmpPieData[1].push({name: "cyklistů", data: tmpTableData[1].cyclists, color: "#da2127", direction: detector.properties.SecondDirection_Name});
         tmpPieData[1].push({name: "chodců", data: tmpTableData[1].pedestrians, color: "#0B3954", direction: detector.properties.SecondDirection_Name});
         setPieChartData(tmpPieData);
-
-        console.log("filter ended");
     }
 
     //funkce pro ovládání kliknutí na tlačítko filtrovat
