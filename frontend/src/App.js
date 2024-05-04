@@ -45,10 +45,10 @@ function App() {
 
   const [errorLoading, setErrorLoading] = useState();
 
+  //úvodní načtení dat
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      
       var resultDetectors, jsonResultDetectors, resultAll, jsonResultAll, resultBikeToWork, jsonResultBikeToWork, resultCensus, jsonResultCensus;
 
       try{
@@ -65,17 +65,19 @@ function App() {
         jsonResultCensus = await resultCensus.json();
       }catch (e){
         setErrorLoading(e);
+        console.log(e);
         return;
       }
 
+      //uložení datových sad
       setPoints(jsonResultDetectors.features)
       setModel(jsonResultAll.features);
       setBikeToWork(jsonResultBikeToWork.features);
 
+      //vytvoření maxim pro jednotlivé bikeToWork datových sad pro použití v heatmapě
       const tempMap = new Map();
       var tempMax = [0,0,0,0,0];
       jsonResultBikeToWork.features.forEach((element,index) => {
-        //debugger
         if(element.properties.data_2018 > tempMax[0]){
           tempMax[0] = element.properties.data_2018;
         }
@@ -96,7 +98,7 @@ function App() {
       setMaxBikeToWork([...tempMax])
       setBikeToWorkMap(tempMap);
 
-      
+      //vytvoření maxim pro jednotlivé Census datových sad pro použití v heatmapě
       var tempMaxCensus = [0,0,0,0,0,0,0,0];
       jsonResultCensus.features.forEach((element) => {
         if(element.properties.vik_2016 > tempMaxCensus[0]){
@@ -128,9 +130,8 @@ function App() {
       setMaxCensus([...updatedMaxCensus]);
       setCensus(jsonResultCensus.features);
 
-
+      //výpočet vah pro heatmapu
       const calculatedWeights = jsonResultAll.features.map(fullmodel => getWeight(jsonResultBikeToWork.features[tempMap.get(fullmodel.properties.biketowork_id)], jsonResultCensus.features.find(objekt => objekt.properties.ObjectId === fullmodel.properties.city_census_id), tempMax, updatedMaxCensus));
-      
       setKeys(calculatedWeights.length);
       setWeights([...calculatedWeights]);
 
@@ -138,13 +139,13 @@ function App() {
       
     }
 
-    
     if(!isLoading){
       fetchData();
     }
     
   }, [])
 
+  //funkce pro nastavení klíčů pro úseky heatmapy
   const setKeys = (size) => {
     if(roadKeys.length === 0){
       const array = Array.from({ length: size }, (_, index) => uuidv4())
@@ -156,6 +157,7 @@ function App() {
     }
   }
 
+  //funkce pro načtení nehod
   const LoadAccidents = async () => {
     if(accidents.length === 0){
       const result = await fetch('http://localhost:3001/accidents')
@@ -167,12 +169,14 @@ function App() {
     }
   }
 
+  //funkce pro zobrazení nehod
   useEffect(() => {
     if(accidents.length > 0){
       setShowAccident(true);
     }
   }, [accidents])
 
+  //funkce pro přepočítání vah při změně zobrazovaných datových sad
   useEffect(() =>{
     //debugger
       if(bikeToWorkMap.size > 0 && maxCensus !== 0){
@@ -187,10 +191,9 @@ function App() {
       else{
         setShowAccident(false);
       }
-      
-      
   }, [useDataset, bikeToWorkHeatmap, censusHeatmap])
 
+  //přegenerování předchozího klíče při překliknutí úseků heatmapy
   const regeneratePrevKey = (index) => {
     var tmpKeys = roadKeys;
     if(selectedRoad != null){
@@ -212,8 +215,8 @@ function App() {
 
   }
 
+  //funkce pro obsluhu kliknutí na detektor
   const detectorClick = (index) => {
-
     regeneratePrevKey(null);
     setShowRoad(false);
     setSelectedRoad(null);
@@ -223,11 +226,13 @@ function App() {
     setSelectedPoint(index);
   }
 
+  //funkce pro obsluhu zavření detailu nehody
   const closeAccidentDetail = () => {
     setShowAccidentDetail(false);
     setSelectedAccident(null)
   }
 
+  //funkce pro obsluhu kliknutí na nehodu
   const accidentClick = (index) => {
     setShowRoad(false);
     setSelectedRoad(null);
@@ -237,12 +242,13 @@ function App() {
     setShowAccidentDetail(true);
   }
 
+  //funkce pro obsluhu zavření detaily detektoru
   function closeDetectorDetail(){
-    //debugger;
     setShowDetector(false);
     setSelectedPoint(null);
   }
 
+  //funkce pro obsluhu zavření detailu cesty
   function closeRoadDetail(){
     regeneratePrevKey(null);
     setShowRoad(false);
@@ -250,15 +256,21 @@ function App() {
     setSelectedRoadCensus(null);
   }
 
+  //funkce pro mapování číselného rozsahu pro výpočet vah cest
   const mapRange = (value, inputMin, inputMax, outputMin, outputMax) => {
     return ((value - inputMin) * (outputMax - outputMin)) / (inputMax - inputMin) + outputMin;
   };
 
+  //funkce pro výpočet vah pro zobrazení šířky cesty
   function getWeight(biketoWorkEntity, censusEntity, BikeToWorkMax, CensusMax){
+    //hodnota aktuální cesty
     var all = 0;
+    
+    //maximální hodnota
     var max = 0;
-    try{
-      
+
+    //do aktuální a maximální hodnoty přičítám pouze vybrané datové sady
+    try{  
       if(useDataset[0] && biketoWorkEntity){
         if(bikeToWorkHeatmap[0]){
           all += biketoWorkEntity.properties.data_2018;
@@ -330,6 +342,7 @@ function App() {
     }
   }
 
+  //funkce pro obsluhu kliknutí na cestu
   const handlePolylineClick = (fullmodel, index) => {
     setShowDetector(false);
     setSelectedPoint(null);
@@ -339,6 +352,7 @@ function App() {
     regeneratePrevKey(index);
   };
 
+  //zobrazení chyby při načítání
   if(errorLoading){
     return(
       <div className='errDiv'>
