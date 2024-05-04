@@ -4,85 +4,21 @@ const app = express()
 var fs = require('fs');
 const cors = require('cors');
 const moment = require('moment');
-//var detektoryJsonFile = require("../cycling_data/datasets/cyklodetektory.geojson")
 
 app.use(cors());
 
-app.get('/', (req, res) => {
-    console.log('here')
-    res.send('hahaha kokote')
-})
-
 app.get('/detectors', async(req, res) => {
-  
-  /*fs.readFile('../cycling_data/datasets/cyklodetektory.geojson', 'utf8', (err, data) => {
-        if (err) {
-          console.error('Chyba při čtení souboru:', err);
-          return res.status(500).send('Nastala chyba při čtení souboru.');
-        }
-    
-        try {
-          // Parsování geojsonu
-          var geojson = JSON.parse(data);
-           //debugger
-          // Filtrace - například zde filtrování podle vlastnosti "type"
-          /*const filteredFeatures = geojson.features.filter(feature => {
-            return new Date(feature.properties.EndOfInterval)  > new Date("2023");
-          });*/
-          
-          //geojson.features = filteredFeatures;
-          // Vytvoření nového geojsonu s filtrovanými prvky
-          /*const filteredGeojson = {
-            type: 'FeatureCollection',
-            features: filteredFeatures
-          };
-    
-          // Odeslání filtrovaného geojsonu jako odpověď
-          res.json(geojson);
-        } catch (error) {
-          console.error('Chyba při zpracování geojsonu:', error);
-          res.status(500).send('Nastala chyba při zpracování geojsonu.');
-        }
-      });*/
       const response = await axios.get('https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/cyklodetektory/FeatureServer/0/query?where=1=1&outFields=*&f=geojson');
       const data = await response.data;
       res.json(data)
 })
 
 app.get('/bikeToWork', async(req, res) =>{
-    
-  /*fs.readFile('../cycling_data/datasets/do_prace_na_kole.geojson', 'utf8', (err, data) => {
-        if (err) {
-          console.error('Chyba při čtení souboru:', err);
-          return res.status(500).send('Nastala chyba při čtení souboru.');
-        }
-    
-        try {
-          // Parsování geojsonu
-          var geojson = JSON.parse(data);
-            debugger
-          // Filtrace - například zde filtrování podle vlastnosti "type"
-          /*const filteredFeatures = geojson.features.filter(feature => {
-            return new Date(feature.properties.data_2021)  > 60;
-          });
-          
-          geojson.features = filteredFeatures;
-          *//*
-          res.json(geojson);
-        } catch (error) {
-          console.error('Chyba při zpracování geojsonu:', error);
-          res.status(500).send('Nastala chyba při zpracování geojsonu.');
-        }
-      });*/
-      //debugger
       const response = await axios.get('https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/dpnk_data/FeatureServer/0/query?where=1=1&outFields=*&f=geojson');
-      //const response2 
-    
       const data = response.data;
-      
       var data2 = response.data;
      
-    
+      //čtení záznemů podle id dokud nepřetu všechny záznamy
       while(data2.features.length == 2000){
         const hodnoty = data2.features.map(objekt => objekt.properties.OBJECTID);
         const maxHodnota = Math.max(...hodnoty);
@@ -105,15 +41,14 @@ app.get('/fullModel', (req, res) => {
         try {
           // Parsování geojsonu
           var geojson = JSON.parse(data);
-          //  debugger
-          // Filtrace - například zde filtrování podle vlastnosti "type"
+          
+          //odfiltrování prázdných cest
           const filteredFeatures = geojson.features.filter(feature => {
             return feature.properties.biketowork_id != null || feature.properties.city_census_id != null;
           });
-
           geojson.features = filteredFeatures;
           
-
+          //prohození souřadnic x a y pro správné zobrazení
           geojson.features.forEach(feature => {
             feature.geometry.coordinates.forEach((element, index) => {
                 feature.geometry.coordinates[index] = element.map(subArray => {
@@ -121,9 +56,7 @@ app.get('/fullModel', (req, res) => {
                     return [x, y];
                 });
             });
-        });
-
-
+          });
 
           res.json(geojson);
         } catch (error) {
@@ -134,52 +67,19 @@ app.get('/fullModel', (req, res) => {
 })
 
 app.get('/census', async(req, res) => {
-    /*fs.readFile('../cycling_data/datasets/bkom_scitanie.geojson', 'utf8', (err, data) => {
-        if (err) {
-          console.error('Chyba při čtení souboru:', err);
-          return res.status(500).send('Nastala chyba při čtení souboru.');
-        }
-    
-        try {
-          // Parsování geojsonu
-          var geojson = JSON.parse(data);
-            //debugger
-          // Filtrace - například zde filtrování podle vlastnosti "type"
-          /* const filteredFeatures = geojson.features.filter(feature => {
-            return new Date(feature.properties.data_2021)  > 60;
-          });
-          
-          geojson.features = filteredFeatures;
-           *//*
-          res.json(geojson);
-        } catch (error) {
-          console.error('Chyba při zpracování geojsonu:', error);
-          res.status(500).send('Nastala chyba při zpracování geojsonu.');
-        }
-      });*/
-      //debugger
       const response = await axios.get('https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/intenzita_cyklodopravy_pentlogramy/FeatureServer/0/query?where=1=1&outFields=*&f=geojson');
-      //const response2 
-    
       const data = response.data;
-      
-
       res.json(data)
 
 })
 
 app.get('/detectorsHis/:id', async (req, res) => {
-  //debugger
   const id = req.params.id;
-  console.log(id);
   const response = await axios.get('https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/cyklodetektory_history/FeatureServer/0/query?where=LocationId=' + id + '&outFields=*&f=geojson');
-  //const response2 
-
   const data = response.data;
-  
   var data2 = response.data;
- 
   
+  //čtení záznemů podle id dokud nepřetu všechny záznamy
   while(data2.features.length == 1000){
     const hodnoty = data2.features.map(objekt => objekt.properties.ObjectId);
     const maxHodnota = Math.max(...hodnoty);
@@ -188,14 +88,10 @@ app.get('/detectorsHis/:id', async (req, res) => {
     data.features.push(...data2.features);
   }
   
-  //const data2 = response2.data;
-
-  //data.features.push(...data2.features)
   res.json(data);
 })
 
 app.get('/compareCyclistsPedestrians', async (req, res) => {
-  console.log(111111);
   let resultData = [];
   let maxObjectId = 0;
 
@@ -206,10 +102,10 @@ app.get('/compareCyclistsPedestrians', async (req, res) => {
 
           if (features.length === 0) {
               res.json(resultData);
-              return; // End recursion if no more data available
+              return; // Konec rekurze pokud další data nejsou k dispozici
           }
 
-          // Process fetched data
+          //agregace dat
           features.forEach(element => {
               const index = resultData.findIndex(obj => obj.id === element.properties.LocationId);
               if (index === -1) {
@@ -224,10 +120,10 @@ app.get('/compareCyclistsPedestrians', async (req, res) => {
               }
           });
 
-          // Find the maximum ObjectId for the next request
+          // Najdi maximální id pro další dotaz
           maxObjectId = Math.max(...features.map(objekt => objekt.properties.ObjectId));
 
-          // Fetch next batch of data recursively
+          // Načti další várku dat rekurzivně
           await fetchData();
       } catch (error) {
           console.error('Error while fetching data:', error);
@@ -235,14 +131,11 @@ app.get('/compareCyclistsPedestrians', async (req, res) => {
       }
   }
 
-  // Start fetching data
   await fetchData();
 });
 
 
-// compareWeekWeekend endpoint
 app.get('/compareWeekWeekend', async (req, res) => {
-  console.log(222222);
   let resultData = [];
   let maxObjectId = 0;
 
@@ -253,9 +146,10 @@ app.get('/compareWeekWeekend', async (req, res) => {
 
           if (features.length === 0) {
               res.json(resultData);
-              return; // End recursion if no more data available
+              return;// Konec rekurze pokud další data nejsou k dispozici
           }
 
+          //agregace dat
           features.forEach(element => {
               const index = resultData.findIndex(obj => obj.id === element.properties.LocationId);
               const all = element.properties.FirstDirection_Cyclists + element.properties.SecondDirection_Cyclists + element.properties.FirstDirection_Pedestrians + element.properties.SecondDirection_Pedestrians;
@@ -274,10 +168,10 @@ app.get('/compareWeekWeekend', async (req, res) => {
               }
           });
 
-          // Find the maximum ObjectId for the next request
+          // Najdi maximální id pro další dotaz
           maxObjectId = Math.max(...features.map(objekt => objekt.properties.ObjectId));
 
-          // Fetch next batch of data recursively
+          // Načti další várku dat rekurzivně
           await fetchData();
       } catch (error) {
           console.error('Error while fetching data:', error);
@@ -291,7 +185,6 @@ app.get('/compareWeekWeekend', async (req, res) => {
 
 // compareDayNight endpoint
 app.get('/compareDayNight', async (req, res) => {
-  console.log(333333);
   let resultData = [];
   let maxObjectId = 0;
 
@@ -302,9 +195,10 @@ app.get('/compareDayNight', async (req, res) => {
 
           if (features.length === 0) {
               res.json(resultData);
-              return; // End recursion if no more data available
+              return; // Konec rekurze pokud další data nejsou k dispozici
           }
 
+          //agregace dat
           features.forEach(element => {
               const index = resultData.findIndex(obj => obj.id === element.properties.LocationId);
               const all = element.properties.FirstDirection_Cyclists + element.properties.SecondDirection_Cyclists + element.properties.FirstDirection_Pedestrians + element.properties.SecondDirection_Pedestrians;
@@ -323,10 +217,10 @@ app.get('/compareDayNight', async (req, res) => {
               }
           });
 
-          // Find the maximum ObjectId for the next request
+          // Najdi maximální id pro další dotaz
           maxObjectId = Math.max(...features.map(objekt => objekt.properties.ObjectId));
 
-          // Fetch next batch of data recursively
+          // Načti další várku dat rekurzivně
           await fetchData();
       } catch (error) {
           console.error('Error while fetching data:', error);
@@ -334,7 +228,6 @@ app.get('/compareDayNight', async (req, res) => {
       }
   }
 
-  // Start fetching data
   await fetchData();
 });
 
