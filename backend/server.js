@@ -1,3 +1,10 @@
+/*
+ * BP - Radek Šerejch, xserej00
+ * FIT VUT, Božetěchova 2, 612 00 Brno, Česká republika
+ *
+ * 2024
+ */
+
 const express = require('express')
 const axios = require('axios');
 const app = express()
