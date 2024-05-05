@@ -1,3 +1,10 @@
+/*
+ * BP - Radek Šerejch, xserej00
+ * FIT VUT, Božetěchova 2, 612 00 Brno, Česká republika
+ *
+ * 2024
+ */
+
 import moment from 'moment';
 import rightIcon from '../img/right.png';
 

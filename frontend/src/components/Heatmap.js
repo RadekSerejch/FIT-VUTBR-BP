@@ -1,3 +1,10 @@
+/*
+ * BP - Radek Šerejch, xserej00
+ * FIT VUT, Božetěchova 2, 612 00 Brno, Česká republika
+ *
+ * 2024
+ */
+
 import React, { memo } from 'react';
 import { Polyline } from 'react-leaflet';
 

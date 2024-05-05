@@ -1,3 +1,10 @@
+/*
+ * BP - Radek Šerejch, xserej00
+ * FIT VUT, Božetěchova 2, 612 00 Brno, Česká republika
+ *
+ * 2024
+ */
+
 import { Icon, divIcon, point } from 'leaflet';
 import { Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from "react-leaflet-cluster";
