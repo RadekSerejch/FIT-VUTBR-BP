@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import closeIcon from '../img/close.png';
+import SpinnerImg from '../img/Spinner-1s-200px.svg';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 function DiagramDetail({type, detectors, closeFunction}){
     //data pro diagram
@@ -86,7 +87,7 @@ function DiagramDetail({type, detectors, closeFunction}){
                 </ResponsiveContainer>
                 {!loaded && 
                 <div className='loadingDivDiagram'>
-                    <img src='./Spinner-1s-200px.svg' alt='Loading...'></img>
+                    <img src={SpinnerImg} alt='Loading...'></img>
                     <p>Toto bude nejspíše chvíli trvat...</p>
                 </div>
                 }

@@ -9,6 +9,7 @@ import { useEffect, useState, useRef } from 'react';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import filterIcon from '../img/filter.png';
 import rightIcon from '../img/right.png';
+import SpinnerImg from '../img/Spinner-1s-200px.svg'
 import moment from 'moment';
 
 import DiagramDetail from './DiagramDetail';
@@ -203,7 +204,7 @@ function DetectorDetail({show, closeFunction, detector, points}){
             <div className='rightIcon'><img src={rightIcon} alt='close' onClick={() => {closeFunction()}}></img></div>
             <div className='filterIcon'><img src={filterIcon} alt='filter' onClick={() => {setShowFilter(!showFilter)}}></img></div>
             
-            { isLoading || !detector ?<><p>Načítání...</p> <img src='./Spinner-1s-200px.svg' alt='Loading...'></img></> : 
+            { isLoading || !detector ?<><p>Načítání...</p> <img src={SpinnerImg} alt='Loading...'></img></> : 
             <div className='detailData'>
             <div id="detectorTable">
             <table>

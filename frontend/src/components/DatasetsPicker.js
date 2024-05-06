@@ -6,6 +6,7 @@
  */
 
 import { useEffect, useState } from "react";
+import DownIcon from '../img/down.png';
 
 function DataSetsPicker({setDataset, useDataset, bikeToWork, census, setBikeToWork, setCensus}){
     //pole indikující, zda mají být jednotlivé datasety použity
@@ -74,7 +75,7 @@ function DataSetsPicker({setDataset, useDataset, bikeToWork, census, setBikeToWo
             Vyberte datové sady:
             <div className="Dataset">
                 <div className="DatasetHeader">
-                    <label className="container">BikeToWork<input type="checkbox" checked={datasets[0]} onChange={() => {changeDatasets(0)}}/><span className="checkmark"></span></label><img src="./down.png" alt='detail' onClick={() => {showDetailBikeToWork()}}></img>
+                    <label className="container">BikeToWork<input type="checkbox" checked={datasets[0]} onChange={() => {changeDatasets(0)}}/><span className="checkmark"></span></label><img src={DownIcon} alt='detail' onClick={() => {showDetailBikeToWork()}}></img>
                 </div>
                 
                 {showBikeToWorkDetail && 
@@ -89,7 +90,7 @@ function DataSetsPicker({setDataset, useDataset, bikeToWork, census, setBikeToWo
 
             <div className="Dataset">
                 <div className="DatasetHeader">
-                    <label className="container"> Sčítání<input type="checkbox" checked={datasets[1]} onChange={() => {changeDatasets(1)}}/> <span className="checkmark"></span></label> <img src="./down.png" alt='detail' onClick={() => {showDetailCensus()}}></img>
+                    <label className="container"> Sčítání<input type="checkbox" checked={datasets[1]} onChange={() => {changeDatasets(1)}}/> <span className="checkmark"></span></label> <img src={DownIcon} alt='detail' onClick={() => {showDetailCensus()}}></img>
                 </div>
                 
                 {showCensusDetail && 

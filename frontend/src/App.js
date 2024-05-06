@@ -19,6 +19,8 @@ import Accidents from './components/Accidents.js';
 import AccidentDetail from './components/AccidentDetail.js';
 import Detectors from './components/Detectors.js';
 
+import SpinnerImg from './img/Spinner-1s-200px.svg';
+
 function App() {
   const [points, setPoints] = useState([])
   
@@ -388,7 +390,7 @@ function App() {
       <DataSetsPicker setDataset={setUseDataset} useDataset={useDataset} bikeToWork={bikeToWorkHeatmap} census={censusHeatmap} setBikeToWork={setBikeToWorkHeatmap} setCensus={setCensusHeatmap}/>
       {isLoading ?
         <div id="loadingDiv">
-          <img src='./Spinner-1s-200px.svg' alt='Loading...'></img>
+          <img src={SpinnerImg} alt='Loading...'></img>
         </div>
         : null
       }
